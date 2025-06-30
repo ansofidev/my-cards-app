@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mockCards } from '../../data/mockCards';
 import type { Card } from '../../types/Card';
-import { columns } from './columns';
+import { getColumns } from './columns';
 import { DataTable } from '../../components/ui/data-table';
 import { CardDialog } from '../../components/card/CardDialog';
 
@@ -13,6 +13,20 @@ const MyCardsPage = () => {
     card.brand.toLowerCase().includes(search.toLowerCase()) ||
     card.last4.includes(search)
   );
+
+  const columns = getColumns({
+  onSetDefault: (cardId) => {
+    setCards((prev) =>
+      prev.map((card) => ({
+        ...card,
+        isDefault: card.id === cardId,
+      }))
+    );
+  },
+  onDelete: (cardId) => {
+    setCards((prev) => prev.filter((card) => card.id !== cardId));
+  },
+});
 
   return (
     <div className="p-6">
